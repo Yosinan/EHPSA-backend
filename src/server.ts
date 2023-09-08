@@ -5,7 +5,7 @@ import morgan from 'morgan'
 import config from './config'
 import cors from 'cors'
 import { connect } from './utils/setupDB'
-
+import donateRouter from './resources/donate/donate.router'
 export const app = express()
 
 app.disable('x-powered-by')
@@ -16,10 +16,7 @@ app.use(bodyParser.json({ limit: '50mb' }))
 app.use(urlencoded({ extended: true, limit: '50mb' }))
 app.use(morgan('dev'))
 
-app.use('/', (req, res) => {
-  res.json({ data: 'Hello World!' })
-})
-
+app.use('/api/test', donateRouter);
 export const start = async () => {
   try {
     await connect()
