@@ -6,6 +6,7 @@ import config from './config'
 import cors from 'cors'
 import { connect } from './utils/setupDB'
 import donateRouter from './resources/donate/donate.router'
+import authRouter from './resources/auth/auth.routes'
 export const app = express()
 
 app.disable('x-powered-by')
@@ -17,6 +18,7 @@ app.use(urlencoded({ extended: true, limit: '50mb' }))
 app.use(morgan('dev'))
 
 app.use('/api/test', donateRouter);
+app.use('/api/v1/auth', authRouter);
 export const start = async () => {
   try {
     await connect()
