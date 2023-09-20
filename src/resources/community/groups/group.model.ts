@@ -12,6 +12,7 @@ export interface IMessage {
   imageUrl?: string;
   videoUrl?: string;
   fileUrl?: string;
+  _id: mongoose.Types.ObjectId;
   timestamp: Date;
 }
 
@@ -21,6 +22,7 @@ const messageSchema = new Schema<IMessage>({
   imageUrl: String,
   videoUrl: String,
   fileUrl: String,
+  _id: mongoose.Types.ObjectId,
   timestamp: { type: Date, required: true },
 });
 
