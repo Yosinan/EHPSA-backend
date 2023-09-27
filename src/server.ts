@@ -7,8 +7,26 @@ import cors from 'cors'
 import { connect } from './utils/setupDB'
 import donateRouter from './resources/donate/donate.router'
 import authRouter from './resources/auth/auth.routes'
+import http from 'http';
+import { Server as SocketIoServer } from 'socket.io';
+import GroupRouter from './resources/community/groups/group.routes'
+
 export const app = express()
 
+const server = http.createServer(app);
+const io = new SocketIoServer(server);
+
+io.on('connection', (socket) => {
+  console.log(`A user connected with socket ID: ${socket.id}`);
+
+  socket.on('message', (data) => {
+    io.emit('message', data);
+  });
+
+  socket.on('disconnect', () => {
+    console.log(`User disconnected with socket ID: ${socket.id}`);
+  });
+});
 app.disable('x-powered-by')
 
 app.use(cors())
@@ -17,8 +35,10 @@ app.use(bodyParser.json({ limit: '50mb' }))
 app.use(urlencoded({ extended: true, limit: '50mb' }))
 app.use(morgan('dev'))
 
-app.use('/api/test', donateRouter);
+app.use('/api/v1/', donateRouter);
 app.use('/api/v1/auth', authRouter);
+app.use('/api/v1/community', GroupRouter )
+
 export const start = async () => {
   try {
     await connect()
