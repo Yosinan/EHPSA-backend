@@ -145,36 +145,38 @@ const createUser = async (
   }
 };
 
-export const verifyEmail = async (
-  req: Request,
-  res: Response,
-) => {
-  const { email, otp } = req.body
-  const checkUser = await User.findOne({ email: email })
+export const verifyEmail = async (req: Request, res: Response) => {
+  const { email, otp } = req.body;
+  const checkUser = await User.findOne({ email: email });
+
   if (!checkUser) {
-    res.locals.json = {
+    return res.status(400).json({
       statusCode: 400,
       message: 'Wrong verification code'
-    }
+    });
   }
-  if (checkUser?.isVerified) {
-    res.locals.json = {
+
+  if (checkUser.isVerified) {
+    return res.status(400).json({
       statusCode: 400,
-      message: 'User is already Verified'
-    }
+      message: 'User is already verified'
+    });
   }
-  const user = await validateUser(email, otp)
+
+  const user = await validateUser(email, otp);
+
   if (!user) {
-    res.locals.json = {
+    return res.status(400).json({
       statusCode: 400,
       message: 'Wrong verification code'
-    }
+    });
   }
-  res.locals.json = {
+
+  return res.status(200).json({
     statusCode: 200,
     message: 'Account successfully verified'
-  }
-}
+  });
+};
 
 const validateUser = async (email: String, otp: String) => {
   try {
