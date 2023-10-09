@@ -1,7 +1,9 @@
+import { boolean } from 'joi';
 import mongoose, { Schema } from 'mongoose'
 
 export interface IUserInterface {
     email: String;
+    isVerified : boolean;
     password: String;
     firstName: String;
     lastName: String;
@@ -21,6 +23,11 @@ export interface IUserInterface {
 const userSchema: Schema<IUserInterface> = new mongoose.Schema({
     email: {
         type: String
+    },
+
+    isVerified : {
+        type: Boolean,
+        default: false
     },
 
     password: {
